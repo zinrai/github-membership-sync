@@ -51,6 +51,7 @@ GraphQL endpoint is derived from it.
 members:
   alice: admin
   bob: member
+  carol: member
 teams:
   platform:
     alice: maintainer
@@ -61,6 +62,18 @@ teams:
 `members` is every member of the organization, as `admin` or `member`. `teams`
 is keyed by team slug, each team as `maintainer` or `member`. Only the teams
 listed are managed; any other team is not read or changed.
+
+Organization and team membership are changed separately:
+
+- to add someone to the organization only, list them in `members`, as carol
+- to add someone to a team, list them in `members` and under the team
+- to take someone off a team but keep them in the organization, remove them
+  from the team only
+- to remove someone from the organization, remove them from `members` and
+  from every team
+
+A team member has to be listed in `members` as well, as GitHub has no team
+member outside the organization.
 
 A file is refused, before any request, when it
 
