@@ -37,12 +37,12 @@ func TestPlanOrdersOrganizationAroundTeams(t *testing.T) {
 		Teams:   map[string]map[string]string{"platform": {"bob": "member", "dave": "member"}},
 	}
 	wantLines := []string{
-		"~ org bob member -> admin",
-		"+ org carol member",
-		"~ team platform bob member -> maintainer",
-		"+ team platform carol member",
-		"- team platform dave",
-		"- org dave",
+		"change org bob member -> admin",
+		"add org carol member",
+		"change team platform bob member -> maintainer",
+		"add team platform carol member",
+		"remove team platform dave",
+		"remove org dave",
 	}
 	if got := lines(plan(want, have)); !slices.Equal(got, wantLines) {
 		t.Errorf("plan =\n%q\nwant\n%q", got, wantLines)

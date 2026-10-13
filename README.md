@@ -19,12 +19,12 @@ github-membership-sync diff \
 prints the plan, one change per line:
 
 ```
-~ org bob member -> admin
-+ org carol member
-~ team platform bob member -> maintainer
-+ team platform carol member
-- team platform dave
-- org dave
+change org bob member -> admin
+add org carol member
+change team platform bob member -> maintainer
+add team platform carol member
+remove team platform dave
+remove org dave
 ```
 
 `apply` takes the same flags, prints the same plan and applies it. To start the

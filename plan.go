@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	opAdd    = "+"
-	opUpdate = "~"
-	opRemove = "-"
+	opAdd    = "add"
+	opChange = "change"
+	opRemove = "remove"
 )
 
 type change struct {
@@ -29,7 +29,7 @@ func (c change) String() string {
 	switch c.op {
 	case opAdd:
 		return fmt.Sprintf("%s %s %s %s", c.op, scope, c.login, c.to)
-	case opUpdate:
+	case opChange:
 		return fmt.Sprintf("%s %s %s %s -> %s", c.op, scope, c.login, c.from, c.to)
 	default:
 		return fmt.Sprintf("%s %s %s", c.op, scope, c.login)
@@ -67,7 +67,7 @@ func compare(team string, want, have map[string]string) (set, remove []change) {
 		case !ok:
 			set = append(set, change{op: opAdd, team: team, login: login, to: want[login]})
 		case have[current] != want[login]:
-			set = append(set, change{op: opUpdate, team: team, login: login, from: have[current], to: want[login]})
+			set = append(set, change{op: opChange, team: team, login: login, from: have[current], to: want[login]})
 		}
 	}
 	for _, login := range sortedLogins(have) {

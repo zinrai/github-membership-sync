@@ -86,7 +86,7 @@ func TestDiffPrintsThePlanToStdoutAndChangesNothing(t *testing.T) {
 	if err := runCommand(context.Background(), gh, cfg, &stdout); err != nil {
 		t.Fatal(err)
 	}
-	want := "+ org carol member\n+ team platform carol member\n- org dave\n"
+	want := "add org carol member\nadd team platform carol member\nremove org dave\n"
 	if stdout.String() != want {
 		t.Errorf("stdout =\n%s\nwant\n%s", stdout.String(), want)
 	}
