@@ -16,8 +16,8 @@ import (
 // fakeGitHub answers every GraphQL query with a single page and records every
 // other request.
 type fakeGitHub struct {
-	members map[string]string            // login to GraphQL role
-	teams   map[string]map[string]string // slug to login to GraphQL role
+	members map[string]string
+	teams   map[string]map[string]string
 
 	mu     sync.Mutex
 	writes []string
