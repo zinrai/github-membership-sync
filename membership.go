@@ -37,9 +37,10 @@ func (m *membership) validate() error {
 	if err := checkUniqueLogins("members", m.Members); err != nil {
 		return err
 	}
-	if !slices.Contains(slices.Collect(maps.Values(m.Members)), "admin") {
+	if countRole(m.Members, "admin") == 0 {
 		return errors.New("members: no admin, nobody would be left to manage the organization")
 	}
+	inOrg := lowerKeys(m.Members)
 	for _, slug := range m.teamSlugs() {
 		team := m.Teams[slug]
 		// An empty "slug:" also reads as nil. Requiring {} keeps a team from
@@ -50,7 +51,7 @@ func (m *membership) validate() error {
 		if err := checkUniqueLogins("teams: "+slug, team); err != nil {
 			return err
 		}
-		if err := checkInOrg(slug, team, m.Members); err != nil {
+		if err := checkInOrg(slug, team, inOrg); err != nil {
 			return err
 		}
 	}
@@ -71,8 +72,7 @@ func checkUniqueLogins(where string, logins map[string]string) error {
 	return nil
 }
 
-func checkInOrg(slug string, team, members map[string]string) error {
-	inOrg := lowerKeys(members)
+func checkInOrg(slug string, team map[string]string, inOrg map[string]bool) error {
 	for login := range team {
 		// Adding a non-member to a team also brings them into the organization,
 		// which members would then disagree with.
