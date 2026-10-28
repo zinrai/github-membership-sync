@@ -17,9 +17,9 @@ const (
 	httpTimeout      = 30 * time.Second
 	maxResponseBytes = 10 << 20
 
-	// defaultAPIBase is the REST API root of github.com. Enterprise Server
-	// serves the API somewhere else, and the operator passes that root as
-	// written rather than a hostname this program would have to map.
+	// Enterprise Server serves the API somewhere else, and the operator passes
+	// that root as written rather than a hostname this program would have to
+	// map.
 	defaultAPIBase = "https://api.github.com"
 )
 
