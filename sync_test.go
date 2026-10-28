@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"strings"
 	"sync"
 	"testing"
@@ -92,6 +93,29 @@ func TestDiffPrintsThePlanToStdoutAndChangesNothing(t *testing.T) {
 	}
 	if w := f.writesSoFar(); len(w) != 0 {
 		t.Errorf("diff made changes: %q", w)
+	}
+}
+
+func TestApplySendsEachChangeInPlanOrder(t *testing.T) {
+	f := &fakeGitHub{
+		members: map[string]string{"alice": "MEMBER", "bob": "MEMBER", "dave": "MEMBER"},
+		teams:   map[string]map[string]string{"platform": {"alice": "MEMBER", "dave": "MEMBER"}},
+	}
+	gh, cfg := startSync(t, f, cmdApply)
+
+	if err := runCommand(context.Background(), gh, cfg, io.Discard); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{
+		`PUT /orgs/example/memberships/alice {"role":"admin"}`,
+		`PUT /orgs/example/memberships/carol {"role":"member"}`,
+		`PUT /orgs/example/teams/platform/memberships/alice {"role":"maintainer"}`,
+		`PUT /orgs/example/teams/platform/memberships/carol {"role":"member"}`,
+		`DELETE /orgs/example/teams/platform/memberships/dave`,
+		`DELETE /orgs/example/memberships/dave`,
+	}
+	if got := f.writesSoFar(); !slices.Equal(got, want) {
+		t.Errorf("writes =\n%q\nwant\n%q", got, want)
 	}
 }
 
