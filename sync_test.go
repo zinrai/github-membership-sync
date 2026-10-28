@@ -72,7 +72,7 @@ teams:
 func startSync(t *testing.T, f *fakeGitHub, command string) (*client, *config) {
 	t.Helper()
 	gh := newTestClient(t, f)
-	cfg := &config{command: command, org: "example", configPath: writeFile(t, fileWithChanges), maxRemovals: 3}
+	cfg := &config{command: command, org: "example", membershipFile: writeFile(t, fileWithChanges), maxRemovals: 3}
 	return gh, cfg
 }
 

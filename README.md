@@ -12,7 +12,7 @@ access is left alone.
 ```
 github-membership-sync diff \
   -org example \
-  -config members.yaml \
+  -membership-file members.yaml \
   -token-file /run/github-token/token
 ```
 

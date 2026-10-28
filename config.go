@@ -31,13 +31,13 @@ Run github-membership-sync <command> -h for the flags of each.
 var errUsage = errors.New("usage")
 
 type config struct {
-	command     string
-	org         string
-	configPath  string
-	tokenFile   string
-	apiBase     string
-	maxRemovals int
-	showVersion bool
+	command        string
+	org            string
+	membershipFile string
+	tokenFile      string
+	apiBase        string
+	maxRemovals    int
+	showVersion    bool
 }
 
 // parseArgs reads the configuration from the command line and nowhere else,
@@ -72,7 +72,7 @@ func parseCommand(top *flag.FlagSet, command string, args []string) (*config, er
 	fs.StringVar(&cfg.apiBase, "api-base", defaultAPIBase, "REST API root, used as written")
 	switch command {
 	case cmdDiff, cmdApply:
-		fs.StringVar(&cfg.configPath, "config", "", "YAML file with the membership to make GitHub match")
+		fs.StringVar(&cfg.membershipFile, "membership-file", "", "YAML file with the membership to make GitHub match")
 		fs.IntVar(&cfg.maxRemovals, "max-removals", 3, "refuse a plan removing more organization members than this")
 	case cmdDump:
 	default:
@@ -126,8 +126,8 @@ func (c *config) validate() error {
 		return errors.New("-org is required")
 	case c.tokenFile == "":
 		return errors.New("-token-file is required")
-	case c.command != cmdDump && c.configPath == "":
-		return errors.New("-config is required")
+	case c.command != cmdDump && c.membershipFile == "":
+		return errors.New("-membership-file is required")
 	}
 	return nil
 }

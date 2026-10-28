@@ -79,7 +79,7 @@ func dump(ctx context.Context, gh *client, org string, stdout io.Writer) error {
 }
 
 func planChanges(ctx context.Context, gh *client, cfg *config, stdout io.Writer) ([]change, error) {
-	want, err := loadMembership(cfg.configPath)
+	want, err := loadMembership(cfg.membershipFile)
 	if err != nil {
 		return nil, err
 	}

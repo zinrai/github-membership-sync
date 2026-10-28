@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestParseArgsRefusesARepeatedFlag(t *testing.T) {
-	base := []string{"apply", "-org", "a", "-config", "members.yaml", "-token-file", "token"}
+	base := []string{"apply", "-org", "a", "-membership-file", "members.yaml", "-token-file", "token"}
 	if _, err := parseArgs(base); err != nil {
 		t.Fatalf("flags given once were rejected: %v", err)
 	}
